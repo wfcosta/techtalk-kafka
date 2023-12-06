@@ -1,0 +1,36 @@
+server:
+  port: 7070
+
+spring:
+  application:
+    name: tech-talk
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    topic:
+      name: tech-talk
+    producer:
+      bootstrap-servers:
+        - localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      acks: all
+      properties:
+        schema.registry.url: http://localhost:8081
+    consumer:
+      bootstrap-servers:
+        - localhost:9092
+      group-id: tech-talk
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        schema.registry.url: http://localhost:8081
+        specific.avro.reader: true
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+        partition.assignment.strategy: org.apache.kafka.clients.consumer.RoundRobinAssignor
+      enable-auto-commit: false
+      retry-attempts: 10
+    listener:
+      ack-mode: manual

@@ -1,0 +1,12 @@
+{
+    "name":"user",
+    "namespace":"br.com.techtalk.avro",
+    "type":"record",
+    "name":"User",
+    "fields":[
+        {
+            "name":"name",
+            "type":"string"
+        }
+    ]
+}
